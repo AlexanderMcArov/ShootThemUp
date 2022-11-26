@@ -1,0 +1,7 @@
+Language: Cpp
+BasedOnStyle: Microsoft
+UseTab: Never
+IndentWidth: 2
+AlignAfterOpenBracket: BlockIndent 
+AlignArrayOfStructures: Left
+AlignConsecutiveMacros: Consecutive

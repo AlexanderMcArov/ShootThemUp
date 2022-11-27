@@ -25,6 +25,7 @@ void ASTUBaseWeapon::BeginPlay()
 
 void ASTUBaseWeapon::StartFire()
 {
+  UE_LOG(LogTemp, Warning, TEXT("BaseWeapon"));
 }
 
 void ASTUBaseWeapon::StopFire()

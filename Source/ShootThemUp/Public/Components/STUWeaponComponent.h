@@ -2,10 +2,8 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
-
 #include "Components/ActorComponent.h"
-
+#include "CoreMinimal.h"
 #include "STUWeaponComponent.generated.h"
 
 class ASTUBaseWeapon;
@@ -24,13 +22,13 @@ public:
   void NextWeapon();
 
 protected:
-  UPROPERTY(EditDefaultsOnly, Category = "Weapon")
+  UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
   TArray<TSubclassOf<ASTUBaseWeapon>> WeaponClasses;
 
-  UPROPERTY(EditDefaultsOnly, Category = "Weapon")
+  UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
   FName WeaponEquipSocketName = "WeaponPoint";
 
-  UPROPERTY(EditDefaultsOnly, Category = "Weapon")
+  UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
   FName WeaponArmorySocketName = "ArmorySocket";
 
   // Called when the game starts

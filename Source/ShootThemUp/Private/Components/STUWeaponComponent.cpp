@@ -2,7 +2,7 @@
 
 #include "Components/STUWeaponComponent.h"
 #include "Weapon/STUBaseWeapon.h"
-
+#include "Components/InputComponent.h"
 #include "GameFramework/Character.h"
 
 USTUWeaponComponent::USTUWeaponComponent()
@@ -20,7 +20,8 @@ void USTUWeaponComponent::BeginPlay()
   EquipWeapon(CurrentWeaponIndex);
 }
 
-void USTUWeaponComponent::EndPlay(const EEndPlayReason::Type EndPlayReason) {
+void USTUWeaponComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
   CurrentWeapon = nullptr;
   for (auto Weapon : Weapons)
   {
@@ -31,7 +32,6 @@ void USTUWeaponComponent::EndPlay(const EEndPlayReason::Type EndPlayReason) {
   Weapons.Empty();
   Super::EndPlay(EndPlayReason);
 }
-
 
 void USTUWeaponComponent::SpawnWeapons()
 {

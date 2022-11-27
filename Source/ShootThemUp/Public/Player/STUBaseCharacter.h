@@ -35,7 +35,7 @@ protected:
   UPROPERTY(VisibleAnyWhere, BlueprintReadWrite, Category = "Components")
   UTextRenderComponent *HealthTextComponent;
 
-  UPROPERTY(VisibleAnyWhere, BlueprintReadWrite, Category = "Components")
+  UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Components")
   USTUWeaponComponent *WeaponComponent;
 
   UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Animation")
@@ -83,5 +83,4 @@ private:
   UFUNCTION()
   void OnGrandLanded(const FHitResult &Hit);
 
-  void SpawnWeapon();
 };

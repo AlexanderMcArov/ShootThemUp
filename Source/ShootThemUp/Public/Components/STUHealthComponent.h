@@ -8,9 +8,8 @@
 
 #include "STUHealthComponent.generated.h"
 
-
-    UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent)) class SHOOTTHEMUP_API USTUHealthComponent
-    : public UActorComponent
+UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
+class SHOOTTHEMUP_API USTUHealthComponent : public UActorComponent
 {
   GENERATED_BODY()
 
@@ -27,6 +26,11 @@ public:
   bool IsDead() const
   {
     return FMath::IsNearlyZero(Health);
+  }
+  UFUNCTION(BlueprintCallable)
+  float GetHealthPercent() const
+  {
+    return Health / MaxHealth;
   }
 
   FOnDeath OnDeath;

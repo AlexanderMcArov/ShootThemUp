@@ -18,12 +18,15 @@ class SHOOTTHEMUP_API ASTUBaseWeapon : public AActor
 public:
   ASTUBaseWeapon();
 
-  virtual void StartFire();
-  virtual void StopFire();
+  virtual void           StartFire();
+  virtual void           StopFire();
   FOnClimpEmptySignature OnClimpEmpty;
 
   void ChangeClip();
   bool CanReload() const;
+
+  FWeaponUIData GetUIData() const { return WeaponUIData; }
+  FAmmoData     GetAmmoData() const { return CurrentAmmo; }
 
 protected:
   UPROPERTY(VisibleAnyWhere, BlueprintReadWrite, Category = "Components")
@@ -38,19 +41,21 @@ protected:
   UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
   FAmmoData DefaultAmmo{15, 10, false};
 
+  UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "WeaponUI")
+  FWeaponUIData WeaponUIData;
+
   virtual void BeginPlay() override;
   virtual void MakeShot();
   virtual bool GetTraceData(FVector &TraceStart, FVector &TraceEnd) const;
 
   APlayerController *GetPlayerController() const;
-  bool GetPlayerViewPoint(FVector &ViewLocation, FRotator &ViewRotation) const;
-  FVector GetMuzzleWorldLocation() const;
-  void MakeHit(FHitResult &HitResult, const FVector &TraceStart, const FVector &TraceEnd);
+  bool               GetPlayerViewPoint(FVector &ViewLocation, FRotator &ViewRotation) const;
+  FVector            GetMuzzleWorldLocation() const;
+  void               MakeHit(FHitResult &HitResult, const FVector &TraceStart, const FVector &TraceEnd);
 
   void DecreaseAmmo();
   bool IsAmmoEmpty() const;
   bool IsClipEmpty() const;
-  void LogAmmo();
 
 private:
   FAmmoData CurrentAmmo;

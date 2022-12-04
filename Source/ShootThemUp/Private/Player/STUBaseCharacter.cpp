@@ -16,16 +16,16 @@ DEFINE_LOG_CATEGORY_STATIC(BaseCharacterLog, All, All)
 
 // Sets default values
 ASTUBaseCharacter::ASTUBaseCharacter(const FObjectInitializer &ObjInit)
-    : Super(ObjInit.SetDefaultSubobjectClass<USTUCharacterMovementComponent>(ACharacter::CharacterMovementComponentName)
-      )
+    : Super(
+          ObjInit.SetDefaultSubobjectClass<USTUCharacterMovementComponent>(ACharacter::CharacterMovementComponentName))
 {
   SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>("SpringArmComponent");
   SpringArmComponent->SetupAttachment(GetRootComponent());
   SpringArmComponent->bUsePawnControlRotation = true;
-  SpringArmComponent->SocketOffset = FVector(0.0f, 100.0f, 80.0f);
+  SpringArmComponent->SocketOffset            = FVector(0.0f, 100.0f, 80.0f);
   // Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
   PrimaryActorTick.bCanEverTick = true;
-  CameraComponent = CreateDefaultSubobject<UCameraComponent>("CameraComponent");
+  CameraComponent               = CreateDefaultSubobject<UCameraComponent>("CameraComponent");
   CameraComponent->SetupAttachment(SpringArmComponent);
 
   HealthComponent = CreateDefaultSubobject<USTUHealthComponent>("STUHealthComponent");
@@ -49,10 +49,7 @@ void ASTUBaseCharacter::BeginPlay()
 }
 
 // Called every frame
-void ASTUBaseCharacter::Tick(float DeltaTime)
-{
-  Super::Tick(DeltaTime);
-}
+void ASTUBaseCharacter::Tick(float DeltaTime) { Super::Tick(DeltaTime); }
 
 // Called to bind functionality to input
 void ASTUBaseCharacter::SetupPlayerInputComponent(UInputComponent *PlayerInputComponent)
@@ -71,19 +68,15 @@ void ASTUBaseCharacter::SetupPlayerInputComponent(UInputComponent *PlayerInputCo
   PlayerInputComponent->BindAction("Reload", IE_Pressed, WeaponComponent, &USTUWeaponComponent::Reload);
 }
 
-bool ASTUBaseCharacter::IsRunning() const
-{
-  return WantsToRun && IsMovingForward && !GetVelocity().IsZero();
-}
+bool ASTUBaseCharacter::IsRunning() const { return WantsToRun && IsMovingForward && !GetVelocity().IsZero(); }
 
 float ASTUBaseCharacter::GetMovementDirection() const
 {
-  if (GetVelocity().IsZero())
-    return 0.0f;
+  if (GetVelocity().IsZero()) return 0.0f;
 
   const auto VelocityNormal = GetVelocity().GetSafeNormal();
-  const auto AngelBetween = FMath::Acos(FVector::DotProduct(GetActorForwardVector(), VelocityNormal));
-  const auto CrossProduct = FVector::CrossProduct(GetActorForwardVector(), VelocityNormal);
+  const auto AngelBetween   = FMath::Acos(FVector::DotProduct(GetActorForwardVector(), VelocityNormal));
+  const auto CrossProduct   = FVector::CrossProduct(GetActorForwardVector(), VelocityNormal);
 
   return FMath::RadiansToDegrees(AngelBetween) * FMath::Sign(CrossProduct.Z);
 }
@@ -101,25 +94,13 @@ void ASTUBaseCharacter::MoveRight(float Amount)
   AddMovementInput(GetActorRightVector(), Amount);
 }
 
-void ASTUBaseCharacter::LookUp(float Amount)
-{
-  AddControllerPitchInput(Amount);
-}
+void ASTUBaseCharacter::LookUp(float Amount) { AddControllerPitchInput(Amount); }
 
-void ASTUBaseCharacter::TurnAround(float Amount)
-{
-  AddControllerYawInput(Amount);
-}
+void ASTUBaseCharacter::TurnAround(float Amount) { AddControllerYawInput(Amount); }
 
-void ASTUBaseCharacter::StartRunning()
-{
-  WantsToRun = true;
-}
+void ASTUBaseCharacter::StartRunning() { WantsToRun = true; }
 
-void ASTUBaseCharacter::StopRunning()
-{
-  WantsToRun = false;
-}
+void ASTUBaseCharacter::StopRunning() { WantsToRun = false; }
 
 void ASTUBaseCharacter::OnDeath()
 {
@@ -131,10 +112,7 @@ void ASTUBaseCharacter::OnDeath()
 
   SetLifeSpan(5.0f);
 
-  if (Controller)
-  {
-    Controller->ChangeState(NAME_Spectating);
-  }
+  if (Controller) { Controller->ChangeState(NAME_Spectating); }
   GetCapsuleComponent()->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
   // WeaponComponent->StopFire();
 }
@@ -149,8 +127,7 @@ void ASTUBaseCharacter::OnGrandLanded(const FHitResult &Hit)
   const auto FallVelocityZ = -GetCharacterMovement()->Velocity.Z;
   UE_LOG(LogTemp, Warning, TEXT("On Landed: %f"), FallVelocityZ);
 
-  if (FallVelocityZ < LandedDamageVelocity.X)
-    return;
+  if (FallVelocityZ < LandedDamageVelocity.X) return;
 
   const auto FinalDamage = FMath::GetMappedRangeValueClamped(LandedDamageVelocity, LandedDamage, FallVelocityZ);
   UE_LOG(LogTemp, Warning, TEXT("FinalDamage: %f"), FinalDamage);

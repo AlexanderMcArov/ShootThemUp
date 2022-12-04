@@ -2,6 +2,14 @@ Language: Cpp
 BasedOnStyle: Microsoft
 UseTab: Never
 IndentWidth: 2
-AlignAfterOpenBracket: BlockIndent 
+BreakBeforeBraces: Custom
+BraceWrapping:
+  AfterEnum: true
+  AfterStruct: false
+  SplitEmptyFunction: true
+AlignConsecutiveDeclarations: true
 AlignArrayOfStructures: Left
-AlignConsecutiveMacros: Consecutive
+AlignConsecutiveAssignments: Consecutive
+AllowShortBlocksOnASingleLine: Always
+AllowShortFunctionsOnASingleLine: All
+AllowShortIfStatementsOnASingleLine: AllIfsAndElse

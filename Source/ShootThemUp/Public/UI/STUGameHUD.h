@@ -7,15 +7,21 @@
 #include "STUGameHUD.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS()
 class SHOOTTHEMUP_API ASTUGameHUD : public AHUD
 {
-	GENERATED_BODY()
+  GENERATED_BODY()
 public:
-    virtual void DrawHUD() override;
-		
-		private:
-    void DrawCrossHair();
+  virtual void DrawHUD() override;
+
+private:
+  void DrawCrossHair();
+
+protected:
+  UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI")
+  TSubclassOf<UUserWidget> PlayerHUDWidgetClass;
+
+  virtual void BeginPlay() override;
 };

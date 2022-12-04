@@ -5,7 +5,6 @@
 #include "Components/ActorComponent.h"
 #include "CoreMinimal.h"
 #include "STUCoreTypes.h"
-
 #include "STUWeaponComponent.generated.h"
 
 class ASTUBaseWeapon;
@@ -16,13 +15,16 @@ class SHOOTTHEMUP_API USTUWeaponComponent : public UActorComponent
   GENERATED_BODY()
 
 public:
-  // Sets default values for this component's properties
+  // Sets default values for this component's properties 
   USTUWeaponComponent();
 
   void StartFire();
   void StopFire();
   void NextWeapon();
   void Reload();
+
+  bool GetWeaponUIData(FWeaponUIData &UIData) const;
+  bool GetWeaponAmmoData(FAmmoData &AmmoData) const;
 
 protected:
   UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
@@ -51,9 +53,9 @@ private:
   UPROPERTY()
   UAnimMontage *CurrentReloadAnimMontage = nullptr;
 
-  int32 CurrentWeaponIndex = 0;
-  bool EquipAnimInProgress = false;
-  bool ReloadAnimInProgress = false;
+  int32 CurrentWeaponIndex   = 0;
+  bool  EquipAnimInProgress  = false;
+  bool  ReloadAnimInProgress = false;
 
   void AttachWeaponSocket(ASTUBaseWeapon *Weapon, USceneComponent *SceneComponent, const FName &SocketName);
   void EquipWeapon(int32 WeaponIndex);

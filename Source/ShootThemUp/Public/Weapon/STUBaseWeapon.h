@@ -18,15 +18,18 @@ class SHOOTTHEMUP_API ASTUBaseWeapon : public AActor
 public:
   ASTUBaseWeapon();
 
-  virtual void           StartFire();
-  virtual void           StopFire();
-  FOnClimpEmptySignature OnClimpEmpty;
+  virtual void StartFire();
+  virtual void StopFire();
 
   void ChangeClip();
-  bool CanReload() const;
+
+  FOnClimpEmptySignature OnClimpEmpty;
 
   FWeaponUIData GetUIData() const { return WeaponUIData; }
   FAmmoData     GetAmmoData() const { return CurrentAmmo; }
+
+  bool CanReload() const;
+  bool TryToAddAmmo(int32 ClipsAmount);
 
 protected:
   UPROPERTY(VisibleAnyWhere, BlueprintReadWrite, Category = "Components")
@@ -49,13 +52,16 @@ protected:
   virtual bool GetTraceData(FVector &TraceStart, FVector &TraceEnd) const;
 
   APlayerController *GetPlayerController() const;
-  bool               GetPlayerViewPoint(FVector &ViewLocation, FRotator &ViewRotation) const;
-  FVector            GetMuzzleWorldLocation() const;
-  void               MakeHit(FHitResult &HitResult, const FVector &TraceStart, const FVector &TraceEnd);
+
+  FVector GetMuzzleWorldLocation() const;
+
+  bool GetPlayerViewPoint(FVector &ViewLocation, FRotator &ViewRotation) const;
+  void MakeHit(FHitResult &HitResult, const FVector &TraceStart, const FVector &TraceEnd);
 
   void DecreaseAmmo();
   bool IsAmmoEmpty() const;
   bool IsClipEmpty() const;
+  bool IsAmmoFull() const;
 
 private:
   FAmmoData CurrentAmmo;

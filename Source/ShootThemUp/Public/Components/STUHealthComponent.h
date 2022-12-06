@@ -17,24 +17,22 @@ public:
   // Sets default values for this component's properties
   USTUHealthComponent();
 
-  float const GetHealth()
-  {
-    return Health;
-  }
+  void SetHealth(float NewHealth);
+
+  float const GetHealth() { return Health; }
+  float const GetMaxHealth() { return MaxHealth; }
 
   UFUNCTION(BlueprintCallable)
-  bool IsDead() const
-  {
-    return FMath::IsNearlyZero(Health);
-  }
+  bool IsDead() const { return FMath::IsNearlyZero(Health); }
   UFUNCTION(BlueprintCallable)
-  float GetHealthPercent() const
-  {
-    return Health / MaxHealth;
-  }
+  float GetHealthPercent() const { return Health / MaxHealth; }
 
-  FOnDeath OnDeath;
+  FOnDeath         OnDeath;
   FOnHealthChanged OnHealthChanged;
+
+  bool TryToAddHealth(float HealthAmount);
+  bool IsHealthFull() const { return FMath::IsNearlyEqual(Health, MaxHealth); }
+
 
 protected:
   // Called when the game starts
@@ -56,15 +54,12 @@ protected:
   virtual void BeginPlay() override;
 
 private:
-  float Health = 0.0f;
+  float        Health = 0.0f;
   FTimerHandle HealTimerHandle;
 
   UFUNCTION()
-  void OnTakeAnyDamage(
-      AActor *DamagedActor, float Damage, const class UDamageType *DamageType, class AController *InstigatedBy,
-      AActor *DamageCauser
-  );
+  void OnTakeAnyDamage(AActor *DamagedActor, float Damage, const class UDamageType *DamageType,
+                       class AController *InstigatedBy, AActor *DamageCauser);
 
   void HealUpdate();
-  void SetHealth(float NewHealth);
 };

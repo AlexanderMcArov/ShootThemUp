@@ -1,11 +1,12 @@
 #pragma once
 #include "STUCoreTypes.generated.h"
 
+class ASTUBaseWeapon;
+
 DECLARE_MULTICAST_DELEGATE(FOnDeath);
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnHealthChanged, float);
-DECLARE_MULTICAST_DELEGATE(FOnClimpEmptySignature);
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnClimpEmptySignature, ASTUBaseWeapon *);
 
-class ASTUBaseWeapon;
 
 USTRUCT(BlueprintType)
 struct FAmmoData {
@@ -41,7 +42,7 @@ struct FWeaponUIData {
 
   UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "WeaponUI")
   UTexture2D *CrossHairIcon;
-  
+
   UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "WeaponUI")
   float GoGo = 0.1f;
 };

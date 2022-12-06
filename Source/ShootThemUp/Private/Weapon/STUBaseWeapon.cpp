@@ -83,12 +83,10 @@ void ASTUBaseWeapon::DecreaseAmmo()
   if (IsClipEmpty() && !IsAmmoEmpty())
   {
     StopFire();
-    OnClimpEmpty.Broadcast();
+    OnClimpEmpty.Broadcast(this);
   }
 }
-bool ASTUBaseWeapon::IsAmmoEmpty() const { return !CurrentAmmo.Infinite && CurrentAmmo.Clips == 0 && IsClipEmpty(); }
-bool ASTUBaseWeapon::CanReload() const { return CurrentAmmo.Bullets < DefaultAmmo.Bullets && CurrentAmmo.Clips > 0; }
-bool ASTUBaseWeapon::IsClipEmpty() const { return CurrentAmmo.Bullets == 0; }
+
 void ASTUBaseWeapon::ChangeClip()
 {
   if (!CurrentAmmo.Infinite)
@@ -99,4 +97,40 @@ void ASTUBaseWeapon::ChangeClip()
   }
   CurrentAmmo.Bullets = DefaultAmmo.Bullets;
   UE_LOG(LogBaseWeapon, Warning, TEXT("------ Change Clip ------"));
+}
+
+bool ASTUBaseWeapon::IsAmmoEmpty() const { return !CurrentAmmo.Infinite && CurrentAmmo.Clips == 0 && IsClipEmpty(); }
+bool ASTUBaseWeapon::CanReload() const { return CurrentAmmo.Bullets < DefaultAmmo.Bullets && CurrentAmmo.Clips > 0; }
+bool ASTUBaseWeapon::IsClipEmpty() const { return CurrentAmmo.Bullets == 0; }
+bool ASTUBaseWeapon::TryToAddAmmo(int32 ClipsAmount)
+{
+  if (CurrentAmmo.Infinite || IsAmmoFull() || ClipsAmount <= 0) return false;
+
+  if (IsAmmoEmpty())
+  {
+    CurrentAmmo.Clips = FMath::Clamp(CurrentAmmo.Clips + ClipsAmount, 0, DefaultAmmo.Clips + 1);
+    OnClimpEmpty.Broadcast(this);
+  }
+  else if (CurrentAmmo.Clips < DefaultAmmo.Clips)
+  {
+    const auto NextClipsAmount = CurrentAmmo.Clips + ClipsAmount;
+    if (DefaultAmmo.Clips - NextClipsAmount >= 0) { CurrentAmmo.Clips = NextClipsAmount; }
+    else
+    {
+      CurrentAmmo.Clips   = DefaultAmmo.Clips;
+      CurrentAmmo.Bullets = DefaultAmmo.Bullets;
+    }
+  }
+  else
+  {
+    CurrentAmmo.Clips   = DefaultAmmo.Clips;
+    CurrentAmmo.Bullets = DefaultAmmo.Bullets;
+  }
+  return true;
+}
+
+bool ASTUBaseWeapon::IsAmmoFull() const
+{
+  return CurrentAmmo.Bullets == DefaultAmmo.Bullets //
+         && CurrentAmmo.Clips == DefaultAmmo.Clips;
 }

@@ -5,6 +5,8 @@
 #include "DrawDebugHelpers.h"
 #include "Engine/World.h"
 #include "GameFramework/Character.h"
+#include "NiagaraComponent.h"
+#include "NiagaraFunctionLibrary.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogBaseWeapon, All, All)
 
@@ -70,8 +72,11 @@ void ASTUBaseWeapon::MakeHit(FHitResult &HitResult, const FVector &TraceStart, c
 
   FCollisionQueryParams CollisionParams;
   CollisionParams.AddIgnoredActor(GetOwner());
+  CollisionParams.bReturnPhysicalMaterial = true;
 
-  GetWorld()->LineTraceSingleByChannel(HitResult, TraceStart, TraceEnd, ECollisionChannel::ECC_Visibility);
+  GetWorld()->LineTraceSingleByChannel(HitResult,            //
+                                       TraceStart, TraceEnd, //
+                                       ECollisionChannel::ECC_Visibility, CollisionParams);
 }
 
 void ASTUBaseWeapon::DecreaseAmmo()
@@ -133,4 +138,14 @@ bool ASTUBaseWeapon::IsAmmoFull() const
 {
   return CurrentAmmo.Bullets == DefaultAmmo.Bullets //
          && CurrentAmmo.Clips == DefaultAmmo.Clips;
+}
+
+UNiagaraComponent *ASTUBaseWeapon::SpawnMuzzleFX()
+{
+  return UNiagaraFunctionLibrary::SpawnSystemAttached(MuzzleFX,              //
+                                                      WeaponMeshComponent,   //
+                                                      MuzzleSocketName,      //
+                                                      FVector::ZeroVector,   //
+                                                      FRotator::ZeroRotator, //
+                                                      EAttachLocation::SnapToTarget, true);
 }

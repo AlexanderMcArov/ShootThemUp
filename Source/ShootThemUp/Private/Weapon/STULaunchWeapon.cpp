@@ -35,4 +35,6 @@ void ASTULaunchWeapon::MakeShot()
   }
 
   DecreaseAmmo();
+
+  SpawnMuzzleFX();
 }

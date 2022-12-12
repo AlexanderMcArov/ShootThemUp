@@ -8,7 +8,7 @@
 
 /**
  *
- */
+ */ 
 UCLASS()
 class SHOOTTHEMUP_API USTUCharacterMovementComponent : public UCharacterMovementComponent
 {

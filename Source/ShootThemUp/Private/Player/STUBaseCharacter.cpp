@@ -41,7 +41,7 @@ ASTUBaseCharacter::ASTUBaseCharacter(const FObjectInitializer &ObjInit)
 void ASTUBaseCharacter::BeginPlay()
 {
   Super::BeginPlay();
-  OnHealthChanged(HealthComponent->GetHealth());
+  OnHealthChanged(HealthComponent->GetHealth(), 0.0f);
   HealthComponent->OnDeath.AddUObject(this, &ASTUBaseCharacter::OnDeath);
   HealthComponent->OnHealthChanged.AddUObject(this, &ASTUBaseCharacter::OnHealthChanged);
 
@@ -84,15 +84,10 @@ float ASTUBaseCharacter::GetMovementDirection() const
 void ASTUBaseCharacter::MoveForward(float Amount)
 {
   IsMovingForward = Amount > 0.0;
-  UE_LOG(LogTemp, Error, TEXT("Forward222: %f"), Amount);
   AddMovementInput(GetActorForwardVector(), Amount);
 }
 
-void ASTUBaseCharacter::MoveRight(float Amount)
-{
-  UE_LOG(LogTemp, Error, TEXT("Right: %f"), Amount);
-  AddMovementInput(GetActorRightVector(), Amount);
-}
+void ASTUBaseCharacter::MoveRight(float Amount) { AddMovementInput(GetActorRightVector(), Amount); }
 
 void ASTUBaseCharacter::LookUp(float Amount) { AddControllerPitchInput(Amount); }
 
@@ -106,7 +101,7 @@ void ASTUBaseCharacter::OnDeath()
 {
   UE_LOG(LogTemp, Error, TEXT("Player %s is Dead."), *GetName());
 
-  PlayAnimMontage(DeathAnimMontage);
+  // PlayAnimMontage(DeathAnimMontage);
 
   GetCharacterMovement()->DisableMovement();
 
@@ -115,9 +110,12 @@ void ASTUBaseCharacter::OnDeath()
   if (Controller) { Controller->ChangeState(NAME_Spectating); }
   GetCapsuleComponent()->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
   // WeaponComponent->StopFire();
+
+  GetMesh()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+  GetMesh()->SetSimulatePhysics(true);
 }
 
-void ASTUBaseCharacter::OnHealthChanged(float Health)
+void ASTUBaseCharacter::OnHealthChanged(float Health, float HealthDelta)
 {
   HealthTextComponent->SetText(FText::FromString(FString::Printf(TEXT("%.0f"), Health)));
 }

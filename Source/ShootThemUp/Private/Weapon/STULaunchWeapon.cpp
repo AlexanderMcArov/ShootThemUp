@@ -27,7 +27,7 @@ void ASTULaunchWeapon::MakeShot()
 
   const FTransform SpawnTransform(FRotator::ZeroRotator, GetMuzzleWorldLocation());
   ASTUProjectile *Projectile = GetWorld()->SpawnActorDeferred<ASTUProjectile>(ProjectileClass,SpawnTransform);
-  if (Projectile)
+  if (Projectile) 
   {
     Projectile->SetShotDirection(Direction);
     Projectile->SetOwner(GetOwner()); 

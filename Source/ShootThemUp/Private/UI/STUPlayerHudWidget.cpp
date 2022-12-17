@@ -7,7 +7,7 @@
 
 void USTUPlayerHudWidget::OnHealthChange(float Health, float HealthDelta)
 {
-  if (HealthDelta < 0.1) OnTakeDamage();
+  if (HealthDelta < 0.0) OnTakeDamage();
 }
 
 float USTUPlayerHudWidget::GetHealthPercent() const

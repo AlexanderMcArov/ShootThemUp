@@ -47,7 +47,7 @@ void ASTUProjectile::OnProjectileHit(UPrimitiveComponent *HitComponent, AActor *
                                       UDamageType::StaticClass(),       //
                                       {}, this,                         //
                                       GetController(), DoFullDamage);
-  DrawDebugSphere(GetWorld(), GetActorLocation(), DamageRadius, 24, FColor::Red, false, LifeSeconds);
+
   WeaponFXComponent->PlayImpactFX(Hit);
   Destroy();
 }

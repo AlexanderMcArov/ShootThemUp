@@ -47,9 +47,9 @@ protected:
   UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Movement")
   FVector2D LandedDamage = FVector2D(1.0f, 100.0f);
 
-  
   // Called when the game starts or when spawned
   virtual void BeginPlay() override;
+  virtual void OnDeath();
 
 public:
   // Called every frame
@@ -65,7 +65,7 @@ public:
   float GetMovementDirection() const;
 
 private:
-  bool WantsToRun = false;
+  bool WantsToRun      = false;
   bool IsMovingForward = false;
 
   void MoveForward(float Amount);
@@ -77,10 +77,8 @@ private:
   void StartRunning();
   void StopRunning();
 
-  void OnDeath();
-  void OnHealthChanged(float Health,float HealthDelta);
+  void OnHealthChanged(float Health, float HealthDelta);
 
   UFUNCTION()
   void OnGrandLanded(const FHitResult &Hit);
-
 };

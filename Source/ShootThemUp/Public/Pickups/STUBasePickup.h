@@ -18,6 +18,8 @@ public:
   ASTUBasePickup();
   virtual void Tick(float DeltaTime) override;
 
+  bool CouldBeTaken() const;
+
 protected:
   UPROPERTY(VisibleAnyWhere, Category = "Pickup")
   USphereComponent *CollisionComponent;
@@ -29,11 +31,13 @@ protected:
   virtual void NotifyActorBeginOverlap(AActor *OtherActor) override;
 
 private:
+  void PickupWasTaken();
+  void Respawn();
+  void GenerateRotationYaw();
+
   float RotationYaw = 0.0f;
 
   virtual bool GivePickUpTo(APawn *PlayerPawn);
 
-  void PickupWasTaken();
-  void Respawn();
-  void GenerateRotationYaw();
+  FTimerHandle RespawnTimerHandle;
 };

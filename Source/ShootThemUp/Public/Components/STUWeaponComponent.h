@@ -15,18 +15,20 @@ class SHOOTTHEMUP_API USTUWeaponComponent : public UActorComponent
   GENERATED_BODY()
 
 public:
-  // Sets default values for this component's properties 
+  // Sets default values for this component's properties
   USTUWeaponComponent();
 
-  void StartFire();
+  virtual void StartFire();
+  virtual void NextWeapon();
+
   void StopFire();
-  void NextWeapon();
   void Reload();
+  void EquipWeapon(int32 WeaponIndex);
 
   bool GetWeaponUIData(FWeaponUIData &UIData) const;
   bool GetWeaponAmmoData(FAmmoData &AmmoData) const;
-
   bool TryToAddAmmo(TSubclassOf<ASTUBaseWeapon> WeaponType, int32 ClipsAmount);
+  bool IsNeedAmmoForAnyWeapon(TSubclassOf<ASTUBaseWeapon> WeaponType);
 
 protected:
   UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
@@ -41,26 +43,30 @@ protected:
   UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Animations")
   UAnimMontage *EquipAnimMontage;
 
-  // Called when the game starts
-  virtual void BeginPlay() override;
-  virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
-
-private:
   UPROPERTY()
   ASTUBaseWeapon *CurrentWeapon = nullptr;
 
   UPROPERTY()
   TArray<ASTUBaseWeapon *> Weapons;
 
+  int32 CurrentWeaponIndex = 0;
+
+  // Called when the game starts
+  virtual void BeginPlay() override;
+  // Called when the game end
+  virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+
+  bool CanFire() const;
+  bool CanEquip() const;
+
+private:
   UPROPERTY()
   UAnimMontage *CurrentReloadAnimMontage = nullptr;
 
-  int32 CurrentWeaponIndex   = 0;
-  bool  EquipAnimInProgress  = false;
-  bool  ReloadAnimInProgress = false;
+  bool EquipAnimInProgress  = false;
+  bool ReloadAnimInProgress = false;
 
   void AttachWeaponSocket(ASTUBaseWeapon *Weapon, USceneComponent *SceneComponent, const FName &SocketName);
-  void EquipWeapon(int32 WeaponIndex);
   void SpawnWeapons();
 
   void PlayAnimMontage(UAnimMontage *AnimMontage);
@@ -69,8 +75,6 @@ private:
   void OnEquipFinished(USkeletalMeshComponent *MeshComp);
   void OnReloadFinished(USkeletalMeshComponent *MeshComp);
 
-  bool CanFire() const;
-  bool CanEquip() const;
   bool CanReload() const;
 
   void OnEmptyClip(ASTUBaseWeapon *AmmoEmptyWeapon);

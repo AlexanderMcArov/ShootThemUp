@@ -4,7 +4,7 @@
 class ASTUBaseWeapon;
 
 DECLARE_MULTICAST_DELEGATE(FOnDeath);
-DECLARE_MULTICAST_DELEGATE_TwoParams(FOnHealthChanged, float,float);
+DECLARE_MULTICAST_DELEGATE_TwoParams(FOnHealthChanged, float, float);
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnClimpEmptySignature, ASTUBaseWeapon *);
 
 USTRUCT(BlueprintType)
@@ -76,4 +76,12 @@ struct FImpactData {
 
   UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
   FDecaLData DecalData;
+};
+
+USTRUCT(BlueprintType)
+struct FGameData {
+  GENERATED_USTRUCT_BODY()
+
+  UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Game")
+  int32 PlayersNum = 5;
 };

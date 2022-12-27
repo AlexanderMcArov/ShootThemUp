@@ -32,6 +32,8 @@ public:
 
   bool CanReload() const;
   bool TryToAddAmmo(int32 ClipsAmount);
+  bool IsAmmoEmpty() const;
+  bool IsAmmoFull() const;
 
 protected:
   UPROPERTY(VisibleAnyWhere, BlueprintReadWrite, Category = "Components")
@@ -54,19 +56,18 @@ protected:
 
   virtual void BeginPlay() override;
   virtual void MakeShot();
+
   virtual bool GetTraceData(FVector &TraceStart, FVector &TraceEnd) const;
+
+  void MakeHit(FHitResult &HitResult, const FVector &TraceStart, const FVector &TraceEnd);
+  void DecreaseAmmo();
+
+  bool GetPlayerViewPoint(FVector &ViewLocation, FRotator &ViewRotation) const;
+  bool IsClipEmpty() const;
 
   APlayerController *GetPlayerController() const;
 
   FVector GetMuzzleWorldLocation() const;
-
-  bool GetPlayerViewPoint(FVector &ViewLocation, FRotator &ViewRotation) const;
-  void MakeHit(FHitResult &HitResult, const FVector &TraceStart, const FVector &TraceEnd);
-
-  void DecreaseAmmo();
-  bool IsAmmoEmpty() const;
-  bool IsClipEmpty() const;
-  bool IsAmmoFull() const;
 
   UNiagaraComponent *SpawnMuzzleFX();
 

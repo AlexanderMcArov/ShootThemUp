@@ -222,3 +222,13 @@ bool USTUWeaponComponent::TryToAddAmmo(TSubclassOf<ASTUBaseWeapon> WeaponType, i
   }
   return false;
 }
+
+bool USTUWeaponComponent::IsNeedAmmoForAnyWeapon(TSubclassOf<ASTUBaseWeapon> WeaponType)
+{
+  bool NeedAmmo = false;
+  for (auto Weapon : Weapons)
+  {
+    if (Weapon && Weapon->IsA(WeaponType)) { return !Weapon->IsAmmoFull(); }
+  }
+  return false;
+}

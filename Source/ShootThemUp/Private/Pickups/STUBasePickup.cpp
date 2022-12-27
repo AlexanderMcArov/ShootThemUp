@@ -30,6 +30,8 @@ void ASTUBasePickup::Tick(float DeltaTime)
   AddActorLocalRotation(FRotator(0.0f, RotationYaw, 0.0f));
 }
 
+bool ASTUBasePickup::CouldBeTaken() const { return !GetWorldTimerManager().IsTimerActive(RespawnTimerHandle); }
+
 void ASTUBasePickup::NotifyActorBeginOverlap(AActor *OtherActor)
 {
   UE_LOG(LogBasePickup, Warning, TEXT("Bullet"));
@@ -44,7 +46,6 @@ void ASTUBasePickup::PickupWasTaken()
   CollisionComponent->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
   GetRootComponent()->SetVisibility(false, true);
 
-  FTimerHandle RespawnTimerHandle;
   GetWorldTimerManager().SetTimer(RespawnTimerHandle, this, &ASTUBasePickup::Respawn, RespawnTime);
 }
 

@@ -17,6 +17,9 @@ void ASTUGameModeBase::StartPlay()
 {
   Super::StartPlay();
   SpawnBots();
+
+  CurrentRound = 1;
+  StartRound();
 }
 
 UClass *ASTUGameModeBase::GetDefaultPawnClassForController_Implementation(AController *InController)
@@ -36,7 +39,27 @@ void ASTUGameModeBase::SpawnBots()
     FActorSpawnParameters SpawnInfo;
     SpawnInfo.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
-    const auto STUAIController = GetWorld()->SpawnActor<AAIController>(SpawnInfo);
+    const auto STUAIController = GetWorld()->SpawnActor<AAIController>(AIControllerClass, SpawnInfo);
     RestartPlayer(STUAIController);
+  }
+}
+
+void ASTUGameModeBase::StartRound()
+{
+  RoundCountDown = GameData.RoundTime;
+  GetWorldTimerManager().SetTimer(GameRoundTimerHanlde, this, &ASTUGameModeBase::GameTimerUpdate, 1.0f, true);
+}
+
+void ASTUGameModeBase::GameTimerUpdate()
+{
+  if (--RoundCountDown == 0)
+  {
+    GetWorldTimerManager().ClearTimer(GameRoundTimerHanlde);
+    if (CurrentRound + 1 <= GameData.RoundsNum)
+    {
+      ++CurrentRound;
+      StartRound();
+    }
+    else { UE_LOG(LogTemp, Warning, TEXT("GAME OVER")); }
   }
 }

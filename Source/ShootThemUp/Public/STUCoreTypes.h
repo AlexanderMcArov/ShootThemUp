@@ -81,7 +81,15 @@ struct FImpactData {
 USTRUCT(BlueprintType)
 struct FGameData {
   GENERATED_USTRUCT_BODY()
-
+  // Max Players
   UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Game")
   int32 PlayersNum = 5;
+
+  // Max Rounds
+  UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Game", meta = (ClampMin = "3", ClampMax = "10"))
+  int32 RoundsNum = 5;
+
+  // Time in seconds for one round
+  UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Game", meta = (ClampMin = "5", ClampMax = "300"))
+  int32 RoundTime = 10;
 };
